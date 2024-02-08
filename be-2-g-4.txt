@@ -1,0 +1,113 @@
+SELECT * 
+  FROM [dbo].[Impiegato]
+WHERE Eta > 29
+Order by Eta
+
+SELECT * 
+  FROM [dbo].[Impiegato]
+WHERE RedditoMensile >= 800
+Order by RedditoMensile
+
+SELECT * 
+  FROM [dbo].[Impiegato]
+WHERE DetrazioneFiscale = 0
+Order by Nome
+
+SELECT * 
+  FROM [dbo].[Impiegato]
+WHERE DetrazioneFiscale = 1
+Order by Nome
+
+SELECT * 
+  FROM [dbo].[Impiegato]
+WHERE Cognome like 'G%'
+Order by Cognome
+
+SELECT COUNT(*)
+  FROM [dbo].[Impiegato]
+
+SELECT SUM(RedditoMensile)
+  FROM [dbo].[Impiegato]
+
+SELECT AVG(RedditoMensile)
+  FROM [dbo].[Impiegato]
+
+SELECT MAX(RedditoMensile)
+  FROM [dbo].[Impiegato]
+
+SELECT MIN(RedditoMensile)
+  FROM [dbo].[Impiegato]
+
+SELECT *
+  FROM [dbo].[Impiegato]
+  WHERE Data_Assunzione BETWEEN '2007/01/01 ' AND '2008/01/01'
+
+SELECT *
+  FROM [dbo].[Impiegato] as a
+  join dbo.Impiego as b on a.IDImpiego = b.IDImpiego
+  where a.IDImpiegato = 3
+
+SELECT AVG(ETA)
+  FROM [dbo].[Impiegato]
+
+CREATE PROCEDURE CreaInserisciImpiegato
+    @Cognome NVARCHAR(50),
+    @Nome NVARCHAR(50),
+    @CodisceFiscale NVARCHAR(16),
+    @Eta INT,
+    @RedditoMensile MONEY,
+    @DetrazioneFiscale BIT,
+    @Data_Assunzione DATETIME
+    @IDImpiego INT
+AS
+BEGIN
+    INSERT INTO Impiegato
+           (Cognome, Nome, CodisceFiscale, Eta, RedditoMensile, DetrazioneFiscale, Data_Assunzione, IDImpiego)
+    VALUES
+           (@Cognome,
+           @Nome,
+           @CodisceFiscale,
+           @Eta,
+           @RedditoMensile,
+           @DetrazioneFiscale,
+           @Data_Assunzione,
+	   @IDImpiego);
+END;
+
+
+
+CREATE PROCEDURE AggiornaImpiegato
+    @IDImpiegato INT,
+    @Cognome NVARCHAR(50),
+    @Nome NVARCHAR(60),
+    @CodiceFiscale NVARCHAR(16),
+    @Eta INT,
+    @RedditoMensile MONEY,
+    @DetrazioneFiscale BIT,
+    @Data_Assunzione DATETIME,
+    @IDImpiego INT
+AS
+BEGIN
+    UPDATE [dbo].[Impiegato]
+    SET
+        [Cognome] = @Cognome,
+        [Nome] = @Nome,
+        [CodisceFiscale] = @CodiceFiscale,
+        [Eta] = @Eta,
+        [RedditoMensile] = @RedditoMensile,
+        [DetrazioneFiscale] = @DetrazioneFiscale,
+        [Data_Assunzione] = @Data_Assunzione,
+	[IDImpiego] = @IDImpiego
+    WHERE
+        [IDImpiegato] = @IDImpiegato;
+END;
+
+
+CREATE PROCEDURE EliminaImpiegato
+    @IDImpiegato INT
+AS
+BEGIN
+    DELETE FROM [dbo].[Impiegato]
+    WHERE
+        [IDImpiegato] = @IDImpiegato;
+END;
